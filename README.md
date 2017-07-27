@@ -14,7 +14,7 @@ We are assuming that your app is either made using our https://github.com/pember
 
 1. Add next lines to your to your Gemfile
 
-```
+```ruby
 gem 'shopify_app-kit', github: 'pemberton-rank/shopify_app-kit'
 gem 'omniauth-kit-oauth2', github: 'pemberton-rank/omniauth-kit-oauth2'
 gem 'pr-common', git: 'https://github.com/pemberton-rank/common.git', tag: 'v0.1.6' # :path => '../common'
@@ -24,7 +24,7 @@ gem 'pr-common', git: 'https://github.com/pemberton-rank/common.git', tag: 'v0.1
 
 3. Create `config/initializers/kit.rb` and put next lines there
 
-```
+```ruby
 ShopifyApp::Kit.configure do |config|
   # Id of your main conversation, get it at https://kitcrm.com/oauth/applications
   config.first_conversation_id = 128
@@ -56,7 +56,7 @@ By far you should have some conversations created in Kit developer dashboard.
 Sometimes conversations can include placeholders. Those placeholders are passed along the request, when the conversation is sent.
 If you need to pass some placeholder values, override a methods called `kit_first_placeholders` and `kit_second_placeholders` to include hash mapping placeholder name to its value like this:
 
-```
+```ruby
 class User < ApplicationRecord
   def kit_first_placeholders
     {
@@ -74,7 +74,7 @@ You can run `bin/rake kit` - that task will send your conversation to every user
 
 If you want a precise control of the list of eligible users, override `kit_eligible?` instance method on User class like this, for example
 
-```
+```ruby
 class User < ApplicationRecord
   def kit_eligible?
     self.kit_connected? && self.has_been_notified_by_kit_in_20_days?
