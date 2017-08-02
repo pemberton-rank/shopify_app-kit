@@ -27,7 +27,7 @@ class KitOfferJob
   end
 
   def offer(user)
-    # user.send_first_step_kit_conversation
-    puts user.inspect
+    user.send_kit_conversation
+    # puts user.inspect
   end
 end

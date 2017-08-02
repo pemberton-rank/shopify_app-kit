@@ -27,10 +27,7 @@ gem 'pr-common', git: 'https://github.com/pemberton-rank/common.git', tag: 'v0.1
 ```ruby
 ShopifyApp::Kit.configure do |config|
   # Id of your main conversation, get it at https://kitcrm.com/oauth/applications
-  config.first_conversation_id = 128
-
-  # Id of your secondary conversation, if you haven't one, remove this line
-  config.second_conversation_id = 130
+  config.conversation_id = 128
 
   # OAuth key and secret for your application https://kitcrm.com/oauth/applications
   config.key = ENV['kit_key']
@@ -54,11 +51,11 @@ By far you should have some conversations created in Kit developer dashboard.
 #### Placeholders
 
 Sometimes conversations can include placeholders. Those placeholders are passed along the request, when the conversation is sent.
-If you need to pass some placeholder values, override a methods called `kit_first_placeholders` and `kit_second_placeholders` to include hash mapping placeholder name to its value like this:
+If you need to pass some placeholder values, override a method called `kit_placeholders` to include hash mapping placeholder name to it's value like this:
 
 ```ruby
 class User < ApplicationRecord
-  def kit_first_placeholders
+  def kit_placeholders
     {
       shop_owner_first_name: self.first_name
     }
@@ -67,7 +64,7 @@ end
 ```
 
 #### Send one
-Call a method `user.send_first_step_kit_conversation` or `user.send_second_step_kit_conversation`
+Call a method `user.send_kit_conversation`
 
 #### Send bulk
 You can run `bin/rake kit` - that task will send your conversation to every user that has kit Skill account installed.
@@ -90,23 +87,17 @@ end
 
 After user replied to your Kit dialog, the gem will call one of next callback methods on your user model depending on context:
 
-1. `handle_first_positive_kit_response` - After user said 'yes' to your main conversation
-2. `handle_second_positive_kit_response` - After user said 'yes' to your secondary conversation
-3. `handle_negative_kit_response` - After user said 'no'
-4. `after_send_kit_conversation` - After conversation has been sent to user
+1. `handle_positive_kit_response` - After user said 'yes' to your conversation
+2. `handle_negative_kit_response` - After user said 'no'
+3. `after_send_kit_conversation` - After conversation has been sent to user
 
 
 This is example of a working customization. Override those methods in your User model like this:
 
 ```ruby
 class User < ApplicationRecord
-  def handle_first_positive_kit_response
+  def handle_positive_kit_response
     self.kit_logs.create note: "Received response"
-    self.send_second_step_kit_conversation
-  end
-
-  def handle_second_positive_kit_response
-    self.kit_logs.create note: "Received second response"
     KitMailer.write(user).deliver_now!
   end
 

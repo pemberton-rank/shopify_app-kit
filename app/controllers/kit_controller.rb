@@ -9,9 +9,10 @@ class KitController < ActionController::Base
   end
 
   def conversation_callback
+    @user = User.find_by_kit_user_id(params[:user_id])
     render json: { products: [], metadata: {} }
     Thread.new do
-      KitReply.new(params).take_action!
+      KitReply.new(params[:user_reply], user).take_action!
     end
   end
 

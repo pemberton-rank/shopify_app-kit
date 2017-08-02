@@ -30,23 +30,15 @@ module KitEligible
     end
   end
 
-  def send_first_step_kit_conversation
-    placeholders = prepare_placeholders(kit_first_placeholders)
-    kit.post("/api/v1/conversations/#{ShopifyApp::Kit.config.first_conversation_id}/start", '{ "conversation": { "placeholders": { "shop_owner_first_name": "' + self.first_name + '" } } }')
-    self.after_send_kit_conversation
-  end
-
-  def send_second_step_kit_conversation
-    placeholders = prepare_placeholders(kit_second_placeholders)
-    kit.post("/api/v1/conversations/#{ShopifyApp::Kit.config.second_conversation_id}/start", '{ "conversation": { "placeholders": { "product_names": "' + self.three_best_selling_products + '" } } }')
+  def send_kit_conversation
+    placeholders = prepare_placeholders(kit_placeholders)
+    kit.post("/api/v1/conversations/#{ShopifyApp::Kit.config.conversation_id}/start", '{ "conversation": { "placeholders": { "shop_owner_first_name": "' + self.first_name + '" } } }')
     self.after_send_kit_conversation
   end
 
   def after_send_kit_conversation ;end
 
-  def kit_first_placeholders; {}; end
-
-  def kit_second_placeholders; {}; end
+  def kit_placeholders; {}; end
 
   def prepare_placeholders(hash)
     JSON.generate(hash)
