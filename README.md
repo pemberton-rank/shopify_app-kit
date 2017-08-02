@@ -1,6 +1,6 @@
 # Kit integration for Shopify App
 
-If you own a Shopify App, and would like to integrate it into Kit by creating conversation for user, you can use this gem to handle all the common logic for handling Kit conversation.
+If you own a Shopify App, and would like to integrate it into Kit by creating conversation for user, you can use this gem with all the common logic for handling Kit conversation.
 
 It lets you
 
