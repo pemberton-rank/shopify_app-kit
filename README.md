@@ -113,10 +113,6 @@ end
 
 If you choose not to override some method of those - method will do nothing.
 
-## TODO
-
-- Add tests
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/pemberton-rank/shopify_app-kit. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
