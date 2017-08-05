@@ -1,3 +1,4 @@
+require 'faraday_middleware'
 module KitEligible
   extend ActiveSupport::Concern
 
@@ -32,7 +33,7 @@ module KitEligible
 
   def send_kit_conversation
     placeholders = prepare_placeholders(kit_placeholders)
-    kit.post("/api/v1/conversations/#{ShopifyApp::Kit.config.conversation_id}/start", '{ "conversation": { "placeholders": { "shop_owner_first_name": "' + self.first_name + '" } } }')
+    kit.post("/api/v1/conversations/#{ShopifyApp::Kit.config.conversation_id}/start", '{ "conversation": { "placeholders": ' + placeholders + ' } }')
     self.after_send_kit_conversation
   end
 
@@ -40,11 +41,25 @@ module KitEligible
 
   def kit_placeholders; {}; end
 
+  def handle_positive_kit_response; end
+
+  def handle_negative_kit_response; end
+
   def prepare_placeholders(hash)
     JSON.generate(hash)
   end
 
   def kit_connected?
     self.kit_access_token.present?
+  end
+
+  def take_kit_action!(user_reply)
+    if user_reply == 'yes'
+      handle_positive_kit_response
+    elsif user_reply == 'no'
+      handle_negative_kit_response
+    else
+      raise ArgumentError, 'Unknown user reply, should be yes or no, was: ' + user_reply.inspect
+    end
   end
 end

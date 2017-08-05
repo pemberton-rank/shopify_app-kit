@@ -3,10 +3,7 @@ task :kit => :environment do
   logger = ShopifyApp::Kit.config.rake_task_logger
 
   service = KitOfferJob.new(logger)
-  one_done = true
-  while one_done
-    one_done = service.send_one
-  end
+  service.send_all
 
   puts "#{Time.now.getutc} Sent kit offers."
 end
